@@ -283,18 +283,26 @@ public:
     }
 };
 
-int main() {
-    string code = R"(
-        int a;
-        a = 5;
-        int b;
-        b = a + 10;
-        if (b > 10) {
-            return b;
-        } else {
-            return 0;
-        }
-    )";
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        cerr << "Provide the filename." << endl;
+        return 1;
+    }
+    
+    string filename = argv[1];
+
+    ifstream file(filename);
+
+    if (!file.is_open()) {
+        cout << filename << " does not exist." << endl;
+    }
+
+    string line;
+    string code;
+
+    while (getline(file, line)) {
+        code += line + "\n";
+    }
 
     Lexer lexer(code);
     vector<Token> tokens = lexer.tokenize();

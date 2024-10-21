@@ -1,6 +1,6 @@
 int a;
 a = 5;
-int b;
+int b
 b = a + 10;
 if (b > 10) {
 	return b;

@@ -59,7 +59,7 @@ public:
     Lexer(const string &src) {
         this->src = src;
         this->pos = 0;
-        this->lineNum = 1;
+        this->lineNum = 0;
     }
 
     string consumeNumber() {
@@ -277,7 +277,8 @@ public:
             pos++;
         } else {
             cout << "Syntax error: expected " << tokenTypeToString(type)
-                 << " but found '" << tokens[pos].value << endl;
+                 << " but found '" << tokens[pos].value 
+                 << "' at line " << tokens[pos].lineNum << endl;
             exit(1);
         }
     }
@@ -303,6 +304,8 @@ int main(int argc, char* argv[]) {
     while (getline(file, line)) {
         code += line + "\n";
     }
+
+    file.close();
 
     Lexer lexer(code);
     vector<Token> tokens = lexer.tokenize();

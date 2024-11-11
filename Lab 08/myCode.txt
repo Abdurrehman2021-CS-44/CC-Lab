@@ -1,9 +1,7 @@
-int a;
-a = 5;
-int b
-b = a + 10;
-if (b > 10) {
-	return b;
-} else {
-	return 0;
-}
+// This is a single line comment
+int a;    // Variable declaration
+a = 5;    // Assignment
+
+// This is another comment
+float b = 3;  // Declaration with initialization
+double c = 2;

@@ -12,7 +12,7 @@ enum TokenType {
     T_ASSIGN, T_PLUS, T_MINUS, T_MUL, T_DIV,
     T_LPAREN, T_RPAREN, T_LBRACE, T_RBRACE,
     T_SEMICOLON, T_GT, T_LT, T_EOF,
-    T_FOR, T_WHILE, T_EQ, T_LE, T_AND
+    T_FOR, T_WHILE, T_EQ, T_LE, T_GE, T_AND, T_OR
 };
 
 struct Token {
@@ -49,12 +49,16 @@ string tokenTypeToString(TokenType type) {
         case T_SEMICOLON: return "semicolon (;)";
         case T_GT: return "greater than (>)";
         case T_LT: return "less than (<)";
+        case T_GE: return "greater than or equal (>=)";
+        case T_LE: return "less than or equal (<=)";
         case T_IF: return "if";
         case T_ELSE: return "else";
         case T_RETURN: return "return";
         case T_EOF: return "end of file";
         case T_WHILE: return "while";
         case T_EQ: return "equals (==)";
+        case T_AND: return "logical AND (&&)";
+        case T_OR: return "logical OR (||)";
         default: return "Unknown Token";
     }
 }
@@ -206,11 +210,37 @@ public:
                 case '{': token = Token(T_LBRACE, "{"); break;
                 case '}': token = Token(T_RBRACE, "}"); break;
                 case ';': token = Token(T_SEMICOLON, ";"); break;
-                case '>': token = Token(T_GT, ">"); break;
-                case '<': token = Token(T_LT, "<"); break;
+                case '>':
+                    if (pos + 1 < src.size() && src[pos + 1] == '=') {
+                        token = Token(T_GE, ">=");
+                        pos++;
+                        colNum++;
+                    } else {
+                        token = Token(T_GT, ">");
+                    }
+                    break;
+                case '<':
+                    if (pos + 1 < src.size() && src[pos + 1] == '=') {
+                        token = Token(T_LE, "<=");
+                        pos++;
+                        colNum++;
+                    } else {
+                        token = Token(T_LT, "<");
+                    }
+                    break;
                 case '&':
                     if (pos + 1 < src.size() && src[pos + 1] == '&') {
                         token = Token(T_AND, "&&");
+                        pos++;
+                        colNum++;
+                    } else {
+                        cout << "Unexpected character: " << current << " at line " << lineNum << ", col " << colNum << endl;
+                        exit(1);
+                    }
+                    break;
+                case '|':
+                    if (pos + 1 < src.size() && src[pos + 1] == '|') {
+                        token = Token(T_OR, "||");
                         pos++;
                         colNum++;
                     } else {
@@ -338,7 +368,10 @@ public:
             pos++;
             parseTerm();
         }
-        if (tokens[pos].type == T_GT || tokens[pos].type == T_EQ) {
+        if (tokens[pos].type == T_GT || tokens[pos].type == T_LT || 
+            tokens[pos].type == T_GE || tokens[pos].type == T_LE || 
+            tokens[pos].type == T_EQ || tokens[pos].type == T_AND || 
+            tokens[pos].type == T_OR) {
             pos++;
             parseExpression();
         }

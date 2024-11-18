@@ -3,11 +3,11 @@ int a;    // Variable declaration
 a = 5;    // Assignment
 
 // This is another comment
-float b = 3.6;  // Declaration with initialization
+float b = 3.66;  // Declaration with initialization
 double c = 2;
 
 // While loop starts here
-while(a > 2 && b < 5){ 
+while(a < 2){ 
     // Inside while loop
     a = a + 1;
 }

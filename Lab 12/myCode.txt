@@ -1,0 +1,15 @@
+// This is a comment
+int a;
+a = 5;
+double b;
+b = 6.12;
+char c;
+string d;
+Agar (b > 10 && b < 20) {
+	return b;
+} Magar {
+	return 0;
+}
+while (a > 5) {
+	a = a + 1;
+}
